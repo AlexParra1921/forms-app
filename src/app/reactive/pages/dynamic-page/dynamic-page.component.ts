@@ -6,6 +6,10 @@ import { FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@ang
 })
 export class DynamicPageComponent {
 
+  // public myForm2 = new FormGroup({
+  //   favoriteGames: new FormArray([])
+  // });
+
   public myForm: FormGroup = this.fb.group({
     name: ['', [ Validators.required, Validators.minLength(3) ]],
     favoriteGames: this.fb.array([
@@ -22,6 +26,7 @@ export class DynamicPageComponent {
     return this.myForm.get('favoriteGames') as FormArray;
   }
 
+
   isValidField( field: string ): boolean | null {
     return this.myForm.controls[field].errors
       && this.myForm.controls[field].touched;
@@ -32,7 +37,9 @@ export class DynamicPageComponent {
         && formArray.controls[index].touched;
   }
 
+
   getFieldError( field: string ): string | null {
+
     if ( !this.myForm.controls[field] ) return null;
 
     const errors = this.myForm.controls[field].errors || {};
@@ -41,14 +48,17 @@ export class DynamicPageComponent {
       switch( key ) {
         case 'required':
           return 'Este campo es requerido';
+
         case 'minlength':
           return `Mínimo ${ errors['minlength'].requiredLength } caracters.`;
       }
     }
+
     return null;
   }
 
   onAddToFavorites():void {
+
     if ( this.newFavorite.invalid ) return;
     const newGame = this.newFavorite.value;
 
@@ -58,13 +68,16 @@ export class DynamicPageComponent {
     );
 
     this.newFavorite.reset();
+
   }
+
 
   onDeleteFavorite( index:number ):void {
     this.favoriteGames.removeAt(index);
   }
 
   onSubmit():void {
+
     if ( this.myForm.invalid ) {
       this.myForm.markAllAsTouched();
       return;
@@ -73,5 +86,7 @@ export class DynamicPageComponent {
     console.log(this.myForm.value);
     (this.myForm.controls['favoriteGames'] as FormArray ) = this.fb.array([]);
     this.myForm.reset();
+
   }
+
 }
